@@ -2,7 +2,7 @@ name: slack-test
 on:
   push:
     branches: master
-  deployment
+  deployment:
 
 jobs:
   notify:
