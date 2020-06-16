@@ -1,0 +1,20 @@
+name: slack-test
+on:
+  push:
+    branches: master
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Run task
+      run: echo "This job should notify to slack"
+    - uses: 8398a7/action-slack@v3
+      if: always()
+      with:
+        status: ${{ job.status }}
+        author_name: '배포 알리미'
+        fields: repo,commit,message,action,ref,job,took
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
