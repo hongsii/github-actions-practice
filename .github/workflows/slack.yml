@@ -2,6 +2,8 @@ name: slack-test
 on:
   push:
     branches: master
+  deployment
+
 jobs:
   notify:
     runs-on: ubuntu-latest
