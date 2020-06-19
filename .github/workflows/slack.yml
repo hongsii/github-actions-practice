@@ -2,6 +2,8 @@ name: slack-test
 on:
   push:
     branches: master
+    pahts-ignore:
+    - README.md
   deployment:
 
 jobs:
