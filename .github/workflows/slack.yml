@@ -13,6 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: 8398a7/action-slack@v3
+      name: start job
       if: always()
       with:
         status: custom
@@ -20,7 +21,7 @@ jobs:
         fields: repo,commit,message,action,ref,job,took,workflow,eventName
         custom_payload: |
             {
-              text: `Start ${process.env.AS_JOB} of ${process.env.AS_REPO}`,
+              text: `Start ${process.env.AS_JOB} of ${process.env.AS_REPO}`
             }
 
     - name: Run task
