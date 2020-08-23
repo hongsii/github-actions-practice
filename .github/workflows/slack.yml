@@ -12,6 +12,10 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+
     - uses: 8398a7/action-slack@v3
       name: start job
       if: always()
@@ -56,8 +60,3 @@ jobs:
                 }
               ]
             }
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-        DEPLOY_TRIGGER_URL: ${{ secrets.DEPLOY_TRIGGER_URL }}
-        DEPLOY_GITHUB_TOKEN: ${{ secrets.DEPLOY_GITHUB_TOKEN }}
