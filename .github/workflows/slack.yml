@@ -19,7 +19,7 @@ jobs:
     - uses: 8398a7/action-slack@v3
       if: always()
       with:
-        status: ${{ job.status }}
+        status: custom
         author_name: '배포 알리미'
         fields: repo,commit,message,action,ref,job,took
         custom_payload: |
