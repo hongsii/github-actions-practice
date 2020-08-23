@@ -12,6 +12,17 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
+    - uses: 8398a7/action-slack@v3
+      if: always()
+      with:
+        status: custom
+        author_name: '배포 알리미'
+        fields: repo,commit,message,action,ref,job,took,workflow,eventName
+        custom_payload: |
+            {
+              text: `Start ${process.env.AS_JOB} of ${process.env.AS_REPO}`,
+            }
+
     - name: Run task
       run: |
         echo "This job should notify to slack"
@@ -38,21 +49,6 @@ jobs:
                         { type: "mrkdwn", text: `*job:*\n${process.env.AS_WORKFLOW} -> ${process.env.AS_JOB}` },
                         { type: "mrkdwn", text: `*job event:*\n${process.env.AS_EVENT_NAME}` },
                         { type: "mrkdwn", text: `*elasped time:*\n${process.env.AS_TOOK}` },
-                      ]
-                    },
-                    {
-                      type: "actions",
-                      elements: [
-                        {
-                          type: "button",
-                          style: "primary",
-                          text: { type: "plain_text", text: "deploy" },
-                          url: `${process.env.DEPLOY_TRIGGER_URL}?branch=master&token=${process.env.DEPLOY_GITHUB_TOKEN}`,
-                          confirm: {
-                            title: { type: "plain_text", text: "Deployment" },
-                            text: { type: "plain_text", text: "Do you want to dpeloy ?" }
-                          }
-                        }
                       ]
                     }
                   ]
