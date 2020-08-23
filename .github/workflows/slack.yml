@@ -24,7 +24,7 @@ jobs:
         fields: repo,commit,message,action,ref,job,took,workflow,eventName
         custom_payload: |
             {
-              text: ('${{ job.status }}' === 'success' ? "✅ Successd" : '${{ job.status }}' === 'failure' ? "❌ Failed" : "✖️ Cancelled" ) + ` ${process.env.AS_JOB} of ${process.env.AS_REPO}`,
+              text: ('${{ job.status }}' === 'success' ? "✅ Successd" : '${{ job.status }}' === 'failure' ? "❌ Failed" : "✖️ Cancelled") + ` ${process.env.AS_JOB} of ${process.env.AS_REPO}`,
               attachments: [
                 {
                   color: '${{ job.status }}' === 'success' ? "#00FF00" : '${{ job.status }}' === 'failure' ? "#FF0000" : "#505050",
@@ -47,7 +47,7 @@ jobs:
                           type: "button",
                           style: "primary",
                           text: { type: "plain_text", text: "deploy" },
-                          url: `${process.env.DEPLOY_TRIGGER_URL}?branch=${GITHUB_REF##*/}&token=${process.env.GITHUB_TOKEN}`,
+                          url: `${process.env.DEPLOY_TRIGGER_URL}?branch=master&token=${process.env.GITHUB_TOKEN}`,
                           confirm: {
                             title: { type: "plain_text", text: "Deployment" },
                             text: { type: "plain_text", text: "Do you want to dpeloy ?" }
