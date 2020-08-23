@@ -22,6 +22,26 @@ jobs:
         status: ${{ job.status }}
         author_name: '배포 알리미'
         fields: repo,commit,message,action,ref,job,took
+        custom_payload: |
+          {
+            username: '알림',
+            icon_emoji: ':octocat:',
+            blocks: [
+            {
+              type: "actions",
+              elements: [
+                {
+                  type: "button",
+                  text: {
+                    type: "plain_text",
+                    text: "Link Button"
+                  },
+                  url: "https://api.slack.com/block-kit"
+                }
+              ]
+            }
+            ]
+          }
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
