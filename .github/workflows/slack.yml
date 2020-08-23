@@ -24,7 +24,7 @@ jobs:
         author_name: '배포 알리미'
         fields: repo,commit,message,action,ref,job,took,workflow,eventName
         custom_payload: |
-          { text: `⏱ Start action : ${process.env.AS_JOB} of ${process.env.AS_REPO} }`
+          { text: `⏱ Start action : ${process.env.AS_JOB} of ${process.env.AS_REPO} }` }
 
     - name: Run task
       run: |
