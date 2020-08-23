@@ -23,10 +23,7 @@ jobs:
         status: custom
         author_name: '배포 알리미'
         fields: repo,commit,message,action,ref,job,took,workflow,eventName
-        custom_payload: |
-            {
-              text: `Start ${process.env.AS_JOB} of ${process.env.AS_REPO}`
-            }
+        custom_payload: { text: `🎉 Start action : ${process.env.AS_JOB} of ${process.env.AS_REPO}` }
 
     - name: Run task
       run: |
@@ -40,7 +37,7 @@ jobs:
         fields: repo,commit,message,action,ref,job,took,workflow,eventName
         custom_payload: |
             {
-              text: ('${{ job.status }}' === 'success' ? "✅ Successd" : '${{ job.status }}' === 'failure' ? "❌ Failed" : "✖️ Cancelled") + ` ${process.env.AS_JOB} of ${process.env.AS_REPO}`,
+              text: ('${{ job.status }}' === 'success' ? "✅ Successd" : '${{ job.status }}' === 'failure' ? "❌ Failed" : "✖️ Cancelled") + ` action : ${process.env.AS_JOB} of ${process.env.AS_REPO}`,
               attachments: [
                 {
                   color: '${{ job.status }}' === 'success' ? "#00FF00" : '${{ job.status }}' === 'failure' ? "#FF0000" : "#505050",
