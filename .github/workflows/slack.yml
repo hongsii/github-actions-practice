@@ -21,27 +21,47 @@ jobs:
       with:
         status: custom
         author_name: '배포 알리미'
-        fields: repo,commit,message,action,ref,job,took
+        fields: repo,commit,message,action,ref,job,took,workflow,eventName
         custom_payload: |
-          {
-            username: '알림',
-            icon_emoji: ':octocat:',
-            blocks: [
             {
-              type: "actions",
-              elements: [
+              username: "알림",
+              icon_emoji: ":octocat:",
+              text: ('${{ job.status }}' === 'success' ? "✅ Successd" : "❌ Failed") + ` ${process.env.AS_JOB} of ${process.env.AS_REPO}`,
+              attachments: [
                 {
-                  type: "button",
-                  text: {
-                    type: "plain_text",
-                    text: "Link Button"
-                  },
-                  url: "https://api.slack.com/block-kit"
+                  color: '${{ job.status }}' === 'success' ? "#00FF00" : "#FF0000",
+                  blocks: [
+                    {
+                      type: "section",
+                      fields: [
+                        { type: "mrkdwn", text: `*repo:*\n${process.env.AS_REPO}` },
+                        { type: "mrkdwn", text: `*branch:*\n${process.env.AS_REF}` },
+                        { type: "mrkdwn", text: `*commit:*\n${process.env.AS_MESSAGE} (${process.env.AS_COMMIT})` },
+                        { type: "mrkdwn", text: `*job:*\n${process.env.AS_WORKFLOW} -> ${process.env.AS_JOB}` },
+                        { type: "mrkdwn", text: `*job event:*\n${process.env.AS_EVENT_NAME}` },
+                        { type: "mrkdwn", text: `*elasped time:*\n${process.env.AS_TOOK}` },
+                      ]
+                    },
+                    {
+                      type: "actions",
+                      elements: [
+                        {
+                          type: "button",
+                          style: "primary",
+                          text: { type: "plain_text", text: "deploy" },
+                          url: `${process.env.DEPLOY_TRIGGER_URL}`,
+                          confirm: {
+                            title: { type: "plain_text", text: "Deployment" },
+                            text: { type: "plain_text", text: "Do you want to dpeloy ?" }
+                          }
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             }
-            ]
-          }
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        DEPLOY_TRIGGER_URL: ${{ secrets.DEPLOY_TRIGGER_URL }}
