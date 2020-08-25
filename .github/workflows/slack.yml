@@ -5,9 +5,6 @@ on:
 jobs:
   notify:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
     
     steps:
     - uses: actions/checkout@v2
@@ -30,6 +27,9 @@ jobs:
         fields: repo,commit,message,action,ref,job,took,workflow,eventName
         custom_payload: |
           { text: `⏱  Started ${process.env.AS_EVENT_NAME} action : ${process.env.AS_JOB} of ${process.env.AS_REPO}` }
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
 
   task:
     needs: notify
@@ -77,3 +77,6 @@ jobs:
                 }
               ]
             }
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # optional
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
