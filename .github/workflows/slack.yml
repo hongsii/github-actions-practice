@@ -16,20 +16,39 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - id: set_state_in_progress
+      name: Set deployment status to [in_progress]
+      uses: rsotnychenko/deployment-status-update@0.2.0
+      with:
+        run_id: ${{ github.run_id }}
+        status: in_progress
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - uses: 8398a7/action-slack@v3
-      name: start job
-      if: always()
+      name: Job start notification
+      if: ${{ success() }}
       with:
         status: custom
         author_name: '배포 알리미'
         fields: repo,commit,message,action,ref,job,took,workflow,eventName
         custom_payload: |
-          { text: `⏱ Start action : ${process.env.AS_JOB} of ${process.env.AS_REPO} }` }
+          { text: `⏱  Started ${process.env.AS_EVENT_NAME} action : ${process.env.AS_JOB} of ${process.env.AS_REPO}` }
 
     - name: Run task
       run: |
         echo "This job should notify to slack"
         ls
+    - id: set_state_final
+      if: always()
+      name: Set deployment status
+      uses: rsotnychenko/deployment-status-update@0.2.0
+      with:
+        status: ${{ job.status }}
+        run_id: ${{ github.run_id }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - uses: 8398a7/action-slack@v3
       if: always()
       with:
@@ -38,7 +57,7 @@ jobs:
         fields: repo,commit,message,action,ref,job,took,workflow,eventName
         custom_payload: |
             {
-              text: ('${{ job.status }}' === 'success' ? "🎉 Successd" : '${{ job.status }}' === 'failure' ? "☄️ Failed" : "✖️ Cancelled") + ` action : ${process.env.AS_JOB} of ${process.env.AS_REPO}`,
+              text: ('${{ job.status }}' === 'success' ? "🎉  Successd" : '${{ job.status }}' === 'failure' ? "☄️  Failed" : "✖️  Cancelled") + ` ${process.env.AS_EVENT_NAME} action : ${process.env.AS_JOB} of ${process.env.AS_REPO}`,
               attachments: [
                 {
                   color: '${{ job.status }}' === 'success' ? "#00FF00" : '${{ job.status }}' === 'failure' ? "#FF0000" : "#505050",
