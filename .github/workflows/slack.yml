@@ -1,9 +1,5 @@
 name: slack-test
 on:
-  push:
-    branches: master
-    paths-ignore:
-    - '**.md'
   deployment:
 
 jobs:
@@ -35,6 +31,9 @@ jobs:
         custom_payload: |
           { text: `⏱  Started ${process.env.AS_EVENT_NAME} action : ${process.env.AS_JOB} of ${process.env.AS_REPO}` }
 
+  task:
+    needs: notify
+    runs-on: ubuntu-latest
     - name: Run task
       run: |
         echo "This job should notify to slack"
